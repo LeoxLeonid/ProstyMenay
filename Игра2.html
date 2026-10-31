@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Прости меня...</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+  }
+
+  body {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fbc2eb 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    animation: bgShift 12s ease-in-out infinite;
+  }
+
+  @keyframes bgShift {
+    0%, 100% { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fbc2eb 100%); }
+    50%      { background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 50%, #fbc2eb 100%); }
+  }
+
+  .heart {
+    position: absolute;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 30px;
+    animation: floatUp linear infinite;
+    user-select: none;
+    pointer-events: none;
+  }
+
+  @keyframes floatUp {
+    0%   { transform: translateY(110vh) scale(0.6) rotate(0deg); opacity: 0; }
+    10%  { opacity: 0.9; }
+    90%  { opacity: 0.9; }
+    100% { transform: translateY(-20vh) scale(1.2) rotate(360deg); opacity: 0; }
+  }
+
+  .container {
+    text-align: center;
+    padding: 40px 30px;
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 30px;
+    box-shadow: 0 20px 60px rgba(214, 51, 108, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    max-width: 900px;
+    z-index: 2;
+    animation: popIn 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes popIn {
+    0%   { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  h1 {
+    font-size: clamp(28px, 5.5vw, 64px);
+    font-weight: 800;
+    color: #c2185b;
+    text-shadow: 2px 3px 0 rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 105, 180, 0.6);
+    line-height: 1.25;
+    margin-bottom: 40px;
+    animation: pulse 2.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.03); }
+  }
+
+  .buttons {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 3;
+    min-height: 60px; /* чтобы карточка не «прыгала», когда кнопка улетает */
+  }
+
+  button {
+    font-family: inherit;
+    font-size: 22px;
+    font-weight: 700;
+    padding: 16px 46px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    letter-spacing: 0.5px;
+  }
+
+  #yesBtn {
+    background: linear-gradient(135deg, #ff4e8a, #ff7eb3);
+    color: #fff;
+    box-shadow: 0 10px 25px rgba(255, 78, 138, 0.5);
+  }
+
+  #yesBtn:hover {
+    transform: translateY(-4px) scale(1.06);
+    box-shadow: 0 15px 35px rgba(255, 78, 138, 0.7);
+  }
+
+  #noBtn {
+    background: linear-gradient(135deg, #6a7280, #9aa0ac);
+    color: #fff;
+    box-shadow: 0 10px 25px rgba(106, 114, 128, 0.4);
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+    will-change: left, top, transform;
+  }
+
+  #noBtn:hover {
+    box-shadow: 0 15px 35px rgba(106, 114, 128, 0.6);
+  }
+
+  #finalMessage {
+    display: none;
+    animation: finalPop 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 10;
+    text-align: center;
+    padding: 20px;
+  }
+
+  @keyframes finalPop {
+    0%   { transform: scale(0.3) rotate(-8deg); opacity: 0; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+
+  #finalMessage h2 {
+    font-size: clamp(34px, 7vw, 84px);
+    font-weight: 900;
+    background: linear-gradient(90deg, #ff2e63, #ff7eb3, #ff2e63);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine 3s linear infinite, heartBeat 1.3s ease-in-out infinite;
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  @keyframes shine { to { background-position: 200% center; } }
+
+  @keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    25%      { transform: scale(1.06); }
+    50%      { transform: scale(1); }
+    75%      { transform: scale(1.06); }
+  }
+
+  .emoji-big {
+    display: block;
+    font-size: clamp(50px, 10vw, 110px);
+    margin-bottom: 20px;
+    animation: heartBeat 1.3s ease-in-out infinite;
+  }
+</style>
+</head>
+<body>
+
+  <div class="container" id="mainContainer">
+    <h1>Прости меня пожалуйста,<br>такой идиот 💔</h1>
+    <div class="buttons">
+      <button id="noBtn">Нет</button>
+      <button id="yesBtn">Простить</button>
+    </div>
+  </div>
+
+  <div id="finalMessage">
+    <span class="emoji-big">💖</span>
+    <h2>Я тебя очень люблю,<br>моя прекрасная!</h2>
+  </div>
+
+<script>
+  // --- Фоновые сердечки ---
+  const heartSymbols = ['❤', '💖', '💕', '💗', '💓', '🌸'];
+  function createHeart() {
+    const h = document.createElement('div');
+    h.className = 'heart';
+    h.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+    h.style.left = Math.random() * 100 + 'vw';
+    h.style.fontSize = (18 + Math.random() * 28) + 'px';
+    h.style.animationDuration = (7 + Math.random() * 8) + 's';
+    h.style.animationDelay = (Math.random() * 5) + 's';
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 16000);
+  }
+  for (let i = 0; i < 12; i++) createHeart();
+  setInterval(createHeart, 900);
+
+  // --- Кнопки ---
+  const yesBtn = document.getElementById('yesBtn');
+  const noBtn = document.getElementById('noBtn');
+  const mainContainer = document.getElementById('mainContainer');
+  const finalMessage = document.getElementById('finalMessage');
+
+  const SAFE_MARGIN = 20; // отступ от краёв экрана, px
+
+  // Кнопка "Простить"
+  yesBtn.addEventListener('click', () => {
+    mainContainer.style.display = 'none';
+    noBtn.remove(); // убираем «Нет», если она уже улетела в body
+    finalMessage.style.display = 'block';
+
+    for (let i = 0; i < 40; i++) {
+      setTimeout(() => {
+        const h = document.createElement('div');
+        h.className = 'heart';
+        h.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+        h.style.left = Math.random() * 100 + 'vw';
+        h.style.top = Math.random() * 100 + 'vh';
+        h.style.fontSize = (20 + Math.random() * 40) + 'px';
+        h.style.animation = `heartBeat 1s ease-in-out ${Math.random()}s infinite`;
+        h.style.opacity = '1';
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 4000);
+      }, i * 60);
+    }
+  });
+
+  // Кнопка "Нет" — убегает в случайное место экрана
+  noBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    // 1) ПЕРВЫЙ клик: вынимаем кнопку из карточки в body.
+    //    Иначе backdrop-filter у .container делает её containing block'ом
+    //    для position: fixed, и координаты считаются относительно карточки,
+    //    а не окна — кнопка улетает за экран.
+    if (!noBtn.dataset.escaped) {
+      const r = noBtn.getBoundingClientRect();
+      document.body.appendChild(noBtn);
+      noBtn.style.position = 'fixed';
+      noBtn.style.left = r.left + 'px';
+      noBtn.style.top  = r.top  + 'px';
+      noBtn.style.margin = '0';
+      noBtn.style.zIndex = '9999';
+      noBtn.dataset.escaped = '1';
+    }
+
+    // 2) Считаем габариты кнопки и её повёрнутой рамки
+    const w = noBtn.offsetWidth;
+    const h = noBtn.offsetHeight;
+
+    const angleDeg = Math.random() * 24 - 12;          // -12°..+12°
+    const a = angleDeg * Math.PI / 180;
+
+    const rw = Math.abs(w * Math.cos(a)) + Math.abs(h * Math.sin(a));
+    const rh = Math.abs(w * Math.sin(a)) + Math.abs(h * Math.cos(a));
+
+    // 3) Свободное место внутри окна с учётом отступа
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const availW = Math.max(0, vw - 2 * SAFE_MARGIN - rw);
+    const availH = Math.max(0, vh - 2 * SAFE_MARGIN - rh);
+
+    // 4) Случайная позиция для ЛЕВОГО-ВЕРХНЕГО угла повёрнутой рамки
+    const bx = SAFE_MARGIN + Math.random() * availW;
+    const by = SAFE_MARGIN + Math.random() * availH;
+
+    // 5) Переводим координаты рамки в left/top самой кнопки
+    //    (transform-origin по умолчанию — центр)
+    const left = bx + rw / 2 - w / 2;
+    const top  = by + rh / 2 - h / 2;
+
+    noBtn.style.left = left + 'px';
+    noBtn.style.top  = top  + 'px';
+    noBtn.style.transform = `rotate(${angleDeg.toFixed(1)}deg)`;
+  });
+
+  // Страховка при изменении размера окна — затаскиваем кнопку обратно
+  window.addEventListener('resize', () => {
+    if (!noBtn.dataset.escaped) return;
+    const r = noBtn.getBoundingClientRect();
+    let dx = 0, dy = 0;
+    if (r.left   <  SAFE_MARGIN)                     dx = SAFE_MARGIN - r.left;
+    if (r.right  >  window.innerWidth  - SAFE_MARGIN) dx = (window.innerWidth  - SAFE_MARGIN) - r.right;
+    if (r.top    <  SAFE_MARGIN)                     dy = SAFE_MARGIN - r.top;
+    if (r.bottom >  window.innerHeight - SAFE_MARGIN) dy = (window.innerHeight - SAFE_MARGIN) - r.bottom;
+    if (dx || dy) {
+      noBtn.style.left = (parseFloat(noBtn.style.left) + dx) + 'px';
+      noBtn.style.top  = (parseFloat(noBtn.style.top)  + dy) + 'px';
+    }
+  });
+</script>
+
+</body>
+</html>
